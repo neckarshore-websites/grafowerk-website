@@ -14,8 +14,9 @@ import Wordmark from "@/components/Wordmark";
 export default function Home() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden">
-      {/* Decorative brand "Farbband" — large, behind everything */}
-      <BrandRibbon className="pointer-events-none absolute top-[-3rem] right-[-5rem] -z-10 h-[70vh] w-auto opacity-15 sm:top-[-4rem] sm:right-[-2rem] sm:h-[95vh] sm:opacity-100" />
+      {/* Decorative brand "Farbband" — slim folded ribbon, behind content,
+          right-aligned and bleeding off the right edge (echoes grafowerk.de) */}
+      <BrandRibbon className="pointer-events-none absolute top-12 right-[-3rem] -z-10 h-[58vh] w-auto opacity-20 sm:top-20 sm:right-[-4rem] sm:h-[78vh] sm:opacity-100" />
 
       <main className="relative z-10 flex-1">
         {/* Brand hero */}
