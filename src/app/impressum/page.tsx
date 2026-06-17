@@ -3,45 +3,102 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Impressum — Grafowerk",
-  description: "Impressum der Grafowerk Website.",
+  description: "Impressum und Anbieterkennzeichnung der Grafowerk Website.",
   robots: { index: false, follow: true },
 };
 
-/**
- * Impressum — PLACEHOLDER STUB.
- *
- * Legally required (§ 5 DDG / § 18 MStV) before go-live. The real provider
- * details must be filled in before this site is promoted to production.
- */
+const h2 = "mt-10 font-display text-xl font-semibold text-ink";
+
 export default function ImpressumPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-20">
       <h1 className="font-display text-3xl font-semibold text-ink">Impressum</h1>
 
       <div className="mt-8 space-y-4 text-base leading-relaxed text-muted">
-        <p className="rounded-lg border border-line bg-subtle p-4 text-ink">
-          <strong>Platzhalter.</strong> Die gesetzlich erforderlichen
-          Anbieterangaben (§&nbsp;5 DDG) werden vor dem Live-Gang ergänzt.
+        <h2 className={h2}>Angaben gemäß § 5 DDG</h2>
+        <p className="text-ink">
+          Christian Thoss
+          <br />
+          Rotebühlstraße 174
+          <br />
+          70197 Stuttgart
         </p>
 
-        <p>Angaben gemäß § 5 DDG:</p>
+        <h2 className={h2}>Kontakt</h2>
         <p>
-          Grafowerk
-          <br />
-          [Straße &amp; Hausnummer]
-          <br />
-          [PLZ Ort]
-        </p>
-        <p>
-          <strong>Kontakt:</strong>
+          Telefon:{" "}
+          <a href="tel:+4971121729291" className="text-ink underline">
+            +49 711 217 29 29 1
+          </a>
           <br />
           E-Mail:{" "}
           <a href="mailto:info@grafowerk.de" className="text-ink underline">
             info@grafowerk.de
           </a>
         </p>
+
+        <h2 className={h2}>EU-Streitschlichtung</h2>
         <p>
-          <strong>Vertreten durch:</strong> [Name]
+          Die Europäische Kommission stellt eine Plattform zur
+          Online-Streitbeilegung (OS) bereit:{" "}
+          <a
+            href="https://ec.europa.eu/consumers/odr/"
+            className="text-ink underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://ec.europa.eu/consumers/odr/
+          </a>
+          . Unsere E-Mail-Adresse finden Sie oben im Impressum.
+        </p>
+
+        <h2 className={h2}>
+          Verbraucherstreitbeilegung / Universalschlichtungsstelle
+        </h2>
+        <p>
+          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
+          vor einer Verbraucherschlichtungsstelle teilzunehmen.
+        </p>
+
+        <h2 className={h2}>Haftung für Inhalte</h2>
+        <p>
+          Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte
+          auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach
+          §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht
+          verpflichtet, übermittelte oder gespeicherte fremde Informationen zu
+          überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige
+          Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der
+          Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon
+          unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt
+          der Kenntnis einer konkreten Rechtsverletzung möglich. Bei
+          Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese
+          Inhalte umgehend entfernen.
+        </p>
+
+        <h2 className={h2}>Haftung für Links</h2>
+        <p>
+          Unser Angebot enthält Links zu externen Websites Dritter, auf deren
+          Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden
+          Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten
+          Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten
+          verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der
+          Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte
+          waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente
+          inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete
+          Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden
+          von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
+        </p>
+
+        <h2 className={h2}>Urheberrecht</h2>
+        <p>
+          Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen
+          Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung,
+          Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der
+          Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des
+          jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite
+          sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+          Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt
+          wurden, werden die Urheberrechte Dritter beachtet.
         </p>
       </div>
 
