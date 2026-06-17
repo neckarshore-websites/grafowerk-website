@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { useActionState } from "react";
 import { sendContact } from "@/app/actions/contact";
 import {
@@ -107,19 +108,25 @@ export default function ContactForm() {
         <label htmlFor="contact-project-type" className={labelClass}>
           Projektart <span className="text-muted">(optional)</span>
         </label>
-        <select
-          id="contact-project-type"
-          name="projectType"
-          defaultValue={state.values?.projectType ?? ""}
-          className={fieldClass}
-        >
-          <option value="">Bitte wählen …</option>
-          {PROJECT_TYPES.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            id="contact-project-type"
+            name="projectType"
+            defaultValue={state.values?.projectType ?? ""}
+            className={`${fieldClass} appearance-none pr-11`}
+          >
+            <option value="">Bitte wählen …</option>
+            {PROJECT_TYPES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            className="pointer-events-none absolute top-1/2 right-3.5 size-5 -translate-y-1/2 text-muted"
+            aria-hidden="true"
+          />
+        </div>
       </div>
 
       <div>
