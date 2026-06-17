@@ -1,3 +1,4 @@
+import BrandRibbon from "@/components/BrandRibbon";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import Wordmark from "@/components/Wordmark";
@@ -5,31 +6,40 @@ import Wordmark from "@/components/Wordmark";
 /**
  * Grafowerk landing page (v0).
  *
- * Deliberately minimal — a single, centered column matching the spirit of the
- * current grafowerk.de placeholder, but responsive and on the house stack:
- * wordmark, one line of provisional copy, and the contact form. Real content
- * (services, work, about) layers in later without restructuring this.
+ * Echoes the grafowerk.de identity — wordmark (mirrored R's) on the left, the
+ * green "Farbband" ribbon on the right — but responsive and on the house stack,
+ * with the contact form below. Real content layers in later without restructuring.
  */
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="flex flex-1 items-center justify-center px-6 py-20">
-        <div className="w-full max-w-xl text-center">
-          <Wordmark className="text-4xl sm:text-5xl md:text-6xl" />
-
-          <p className="mt-5 text-base text-muted sm:text-lg">
-            Grafik &amp; Design.
-            <br className="hidden sm:block" /> Unsere neue Website entsteht
-            gerade — schreiben Sie uns gern schon jetzt.
-          </p>
-
-          <div className="mt-12 text-left">
-            <h1 className="mb-6 text-center font-display text-2xl font-semibold text-ink">
-              Kontakt
-            </h1>
-            <ContactForm />
+      <main className="flex-1">
+        {/* Brand hero — wordmark + tagline left, green ribbon right */}
+        <section className="mx-auto max-w-5xl px-6 pt-16 md:pt-24">
+          <div className="grid items-start gap-8 sm:grid-cols-[1fr_auto]">
+            <div className="text-left">
+              <h1>
+                <Wordmark className="text-4xl sm:text-5xl md:text-6xl" />
+              </h1>
+              <p className="mt-6 text-lg text-muted sm:text-xl">
+                Konzeption und Gestaltung
+              </p>
+            </div>
+            <BrandRibbon className="h-36 w-auto justify-self-start sm:h-56 sm:justify-self-end" />
           </div>
-        </div>
+        </section>
+
+        {/* Contact */}
+        <section className="mx-auto max-w-xl px-6 pt-12 pb-20 md:pt-16">
+          <p className="mb-8 text-base text-muted">
+            Unsere neue Website entsteht gerade — schreiben Sie uns gern schon
+            jetzt.
+          </p>
+          <h2 className="mb-6 font-display text-2xl font-semibold text-ink">
+            Kontakt
+          </h2>
+          <ContactForm />
+        </section>
       </main>
 
       <Footer />

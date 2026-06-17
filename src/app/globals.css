@@ -21,6 +21,11 @@
   --color-line: #e6e6e3;
   --color-accent: #0f0f0f;
   --color-accent-hover: #2b2b2b;
+
+  /* Grafowerk brand greens — from the grafowerk.de "Farbband" (green ribbon) */
+  --color-brand-olive: #9fb52e;
+  --color-brand-lime: #c4d72b;
+  --color-brand-olive-dark: #7e9325;
 }
 
 html {

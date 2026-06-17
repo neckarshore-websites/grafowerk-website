@@ -9,7 +9,7 @@ import { test, expect } from "@playwright/test";
 test("@smoke homepage renders wordmark and contact form", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByText("GRAFOWERK", { exact: true })).toBeVisible();
+  await expect(page.getByRole("img", { name: "Grafowerk" })).toBeVisible();
   await expect(page.getByLabel("Name")).toBeVisible();
   await expect(page.getByLabel("E-Mail")).toBeVisible();
   await expect(page.getByLabel("Nachricht")).toBeVisible();

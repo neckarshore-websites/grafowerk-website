@@ -17,14 +17,14 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Grafowerk — Grafik & Design",
+  title: "Grafowerk — Konzeption und Gestaltung",
   description:
-    "Grafowerk — Grafik- und Designstudio. Branding, Webdesign, Print. Website im Aufbau.",
+    "Grafowerk — Konzeption und Gestaltung. Grafik- und Designstudio aus Stuttgart. Website im Aufbau.",
   metadataBase: new URL("https://grafowerk.de"),
   openGraph: {
-    title: "Grafowerk — Grafik & Design",
+    title: "Grafowerk — Konzeption und Gestaltung",
     description:
-      "Grafowerk — Grafik- und Designstudio. Branding, Webdesign, Print. Website im Aufbau.",
+      "Grafowerk — Konzeption und Gestaltung. Grafik- und Designstudio aus Stuttgart. Website im Aufbau.",
     url: "https://grafowerk.de",
     siteName: "Grafowerk",
     locale: "de_DE",
