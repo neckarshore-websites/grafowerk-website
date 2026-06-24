@@ -1,0 +1,64 @@
+name: E2E (Playwright)
+
+# Per-PR + push-to-main gate: runs the local Playwright suite (tests/e2e/) against
+# a dev server. Part of the from-scratch family-CI port to grafowerk-website
+# (2026-06-24) — until now the suite ran only on developer machines and blocked
+# no merge. Mirrors the e2e gate on the other estate sites.
+#
+# The dev server is managed by playwright.config.ts (`webServer: npm run dev`,
+# reuseExistingServer off under CI). The contact form's smoke test deliberately
+# submits WITHOUT consent and asserts the validation error — it never sends mail,
+# so no SMTP creds are needed and the run is deterministic with no third-party
+# hosts.
+#
+# `test:e2e:ci` = `playwright test --grep-invert @external`. grafowerk's local
+# suite has no @external-tagged tests today (the prod/real-host run is the
+# separate `test:smoke` against grafowerk.de), but the flag keeps the family CI
+# contract identical across all sites.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  # Cancel superseded PR runs; let every push-to-main run complete (each main
+  # commit stays gated).
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser (chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests (excludes @external)
+        run: npm run test:e2e:ci
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

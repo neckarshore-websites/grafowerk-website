@@ -1,0 +1,73 @@
+name: Lighthouse Audit
+
+# Part of the from-scratch family-CI port to grafowerk-website (2026-06-24).
+# Runs the estate-standard 3-profile audit (Desktop / Mobile 5G / Mobile 4G).
+# Performance is SOFT on every profile (advisory, never blocks); accessibility /
+# best-practices / seo are HARD @95. See scripts/lighthouse-profiles.mjs.
+#
+# Security-note: this workflow uses ZERO untrusted github.event.* inputs.
+# All run-steps are static literals. No command-injection surface.
+
+on:
+  # Manual fallback — the scheduled cron has proven unreliable on low-traffic
+  # repos (3 of 4 sites' Monday crons never fired on 2026-06-01). Lets us
+  # trigger an on-demand Lighthouse run via `gh workflow run lighthouse.yml`.
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly Monday 07:00 UTC — staggered from the other estate sites
+    # (neckarshore 06:00, rauhut 06:15, goldoni 06:30, oakwood 06:45) to avoid
+    # the GitHub Actions parallel-quota.
+    - cron: "0 7 * * 1"
+
+jobs:
+  lighthouse:
+    name: Lighthouse (Desktop + Mobile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      # grafowerk-website serves on port 3000 (default; see package.json `start`).
+      LIGHTHOUSE_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Profile regression test (no Chrome needed)
+        run: npm run test:lighthouse:unit
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Start server
+        run: npm run start &
+
+      - name: Wait for server
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf "$LIGHTHOUSE_URL" > /dev/null 2>&1 && break
+            sleep 1
+          done
+
+      - name: Run Lighthouse audit
+        run: npm run lighthouse:quick
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .lighthouse/
+          retention-days: 14
+          include-hidden-files: true
