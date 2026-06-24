@@ -11,7 +11,12 @@
     "test:e2e:ci": "playwright test --grep-invert @external",
     "test:smoke": "BASE_URL=https://grafowerk.de playwright test --grep @smoke",
     "test:smoke:local": "playwright test --grep @smoke",
-    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lh-report.html --chrome-flags=--headless --quiet"
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "lighthouse:quick": "node scripts/lighthouse.mjs --quick",
+    "lighthouse:desktop": "node scripts/lighthouse.mjs --quick --profile=desktop",
+    "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
+    "lighthouse:5g": "node scripts/lighthouse.mjs --quick --profile=mobile-5g",
+    "test:lighthouse:unit": "node --test scripts/lighthouse-profiles.test.mjs"
   },
   "dependencies": {
     "lucide-react": "1.7.0",
