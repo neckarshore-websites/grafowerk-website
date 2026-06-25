@@ -50,10 +50,20 @@ export default function DatenschutzPage() {
           und effizienten Bereitstellung unseres Online-Angebots durch einen
           professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO). Sofern eine
           entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung
-          ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO. Da der
-          Hoster Daten auch in den USA verarbeiten kann, weisen wir darauf hin,
-          dass für die USA kein dem europäischen Recht vergleichbares
-          Datenschutzniveau gewährleistet ist.
+          ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO.
+        </p>
+        <p>
+          Die Datenübermittlung in die USA erfolgt auf Basis von
+          EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Vercel Inc.
+          agiert als Auftragsverarbeiter nach Art. 28 DSGVO. Datenschutz Vercel:{" "}
+          <a
+            href="https://vercel.com/legal/privacy-policy"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            vercel.com/legal/privacy-policy
+          </a>
+          .
         </p>
 
         <h2 className={h2}>3. Allgemeine Hinweise und Pflichtinformationen</h2>
