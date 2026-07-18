@@ -47,5 +47,5 @@ next-env.d.ts
 .env*.local
 
 # local tooling
-.claude/
+.claude/*
 !.claude/settings.json
