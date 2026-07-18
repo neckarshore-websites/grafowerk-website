@@ -1,6 +1,6 @@
 {
   "repo": "neckarshore-websites/grafowerk-website",
-  "audited_sha": "801edce37e471eebb7064820c739d244009824a2",
+  "audited_sha": "999eb1cceb7dd877e159aeb2d888762e5ebbe883",
   "red": false,
   "red_detail": null,
   "tests": {
@@ -11,5 +11,5 @@
     "declared": {},
     "lenses": {}
   },
-  "updatedAt": "2026-07-18T07:09:20Z"
+  "updatedAt": "2026-07-18T16:39:08Z"
 }
