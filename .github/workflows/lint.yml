@@ -37,3 +37,9 @@ jobs:
 
       - name: Run ESLint with strict gate
         run: npm run lint -- --max-warnings 0
+
+      # agentRules guard (#2360, revised 2026-09-25). Imports the REAL next.config.ts
+      # (Node 24 strips the types natively) and fails when `agentRules: false` is gone
+      # or when AGENTS.md / CLAUDE.md carries the generated nextjs-agent-rules block.
+      - name: Agent-rules guard
+        run: npm run test:agent-rules
