@@ -1,5 +1,6 @@
 "use server";
 
+import { honeypotAusgeloest } from "@/lib/honeypot";
 import { readSmtpConfig, sendMail } from "@/lib/mailer";
 import {
   PROJECT_TYPES,
@@ -13,7 +14,7 @@ import {
  * Validation is server-side; the client-side `required` is only a UX hint.
  *
  * Anti-spam (v0 = honeypot only; Turnstile/captcha can be layered in later):
- *   - Hidden `website` honeypot field. Bots fill it, humans don't see it.
+ *   - Hidden honeypot field (lib/honeypot.ts). Bots fill it, humans don't see it.
  *     If filled, we silently return success so the bot doesn't retry.
  *
  * GDPR: a consent checkbox is required — submitting without it is a validation
@@ -71,7 +72,7 @@ export async function sendContact(
   formData: FormData,
 ): Promise<ContactState> {
   // ----- Honeypot ---------------------------------------------------
-  if (clean(formData, "website")) {
+  if (honeypotAusgeloest(formData)) {
     // Bot detected — pretend success so they don't retry differently.
     return { status: "success" };
   }

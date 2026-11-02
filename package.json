@@ -17,6 +17,7 @@
     "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
     "lighthouse:5g": "node scripts/lighthouse.mjs --quick --profile=mobile-5g",
     "test:lighthouse:unit": "node --test scripts/lighthouse-profiles.test.mjs",
+    "test:honeypot": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/honeypot.test.mjs",
     "test:agent-rules": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/agent-rules.test.mjs"
   },
   "dependencies": {

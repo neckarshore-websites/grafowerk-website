@@ -43,3 +43,6 @@ jobs:
       # or when AGENTS.md / CLAUDE.md carries the generated nextjs-agent-rules block.
       - name: Agent-rules guard
         run: npm run test:agent-rules
+
+      - name: Honeypot guards
+        run: npm run test:honeypot
