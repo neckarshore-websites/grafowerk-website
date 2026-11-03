@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { useActionState } from "react";
 import { sendContact } from "@/app/actions/contact";
+import { HONEYPOT_FELD } from "@/lib/honeypot";
 import {
   CONTACT_INITIAL_STATE,
   PROJECT_TYPES,
@@ -55,13 +56,17 @@ export default function ContactForm() {
           overflow: "hidden",
         }}
       >
-        <label htmlFor="contact-website">Website (bitte leer lassen)</label>
+        <label htmlFor="contact-nicht-ausfuellen">Bitte leer lassen</label>
         <input
-          id="contact-website"
+          id="contact-nicht-ausfuellen"
           type="text"
-          name="website"
+          name={HONEYPOT_FELD}
           tabIndex={-1}
           autoComplete="off"
+          data-1p-ignore
+          data-lpignore="true"
+          data-bwignore
+          data-form-type="other"
         />
       </div>
 
