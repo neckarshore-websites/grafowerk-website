@@ -96,7 +96,7 @@ jobs:
     permissions:
       contents: write
     concurrency:
-      # Serialize emits so two rapid pushes cannot race on the git push to main.
+      # Serialize emits so two rapid pushes cannot race on the git push to stats-data.
       group: emit-stats-${{ github.ref }}
       cancel-in-progress: false
 
@@ -129,6 +129,13 @@ jobs:
       - name: Capture node-test reporter (gated unit suite)
         run: npm run test:lighthouse:unit > /tmp/lighthouse-unit.out 2>&1 || true
 
+      # The two node --test suites lint.yml gates (test:honeypot, test:agent-rules) were not
+      # counted until 2026-11-24 (website test plan, gap row 3: "grafowerk misses 2").
+      - name: Capture node-test reporters (suites gated in lint.yml)
+        run: |
+          npm run test:honeypot > /tmp/honeypot-unit.out 2>&1 || true
+          npm run test:agent-rules > /tmp/agent-rules-unit.out 2>&1 || true
+
       # Pinned to the full commit SHA of test-stats-action (third-party actions are SHA-pinned,
       # never tag-floated). 54ae407 is the PIR-passed pin — the same pin md-viewer + trustscope
       # Bumped 54ae407 -> 893875d on 2026-09-22: der alte Pin liegt vor den node-test/tsx-Adaptern
@@ -144,6 +151,8 @@ jobs:
           runners: |
             e2e:playwright:/tmp/e2e-list.out
             unit:node-test:/tmp/lighthouse-unit.out
+            unit:node-test:/tmp/honeypot-unit.out
+            unit:node-test:/tmp/agent-rules-unit.out
 
       # Structural contract gate — invariants that hold on BOTH green and red runs. Deliberately
       # does NOT assert a golden total (a red run legitimately undercounts and must still emit).
@@ -160,20 +169,39 @@ jobs:
             || { echo "::error::stats.json failed contract validation"; cat stats.json; exit 1; }
           echo "stats.json is contract-valid:"; cat stats.json
 
-      # Commit stats.json to main only when the meaningful fields changed (everything EXCEPT the
-      # always-changing updatedAt): a new push has a new audited_sha -> commit (keeps the number
-      # fresh); a re-run on the same sha differs only by timestamp -> no churn commit. The
-      # workflow-level paths-ignore on stats.json stops this commit from re-triggering the e2e run.
-      - name: Commit stats.json to main when it changed
+      # Publish stats.json to the UNPROTECTED `stats-data` branch with git plumbing (one blob,
+      # one tree, one commit), never to main: main gets a ruleset with required checks (website
+      # test plan, gap rows 2 and 3), and a bot write to main would be refused. Same step as
+      # neckarshore-website and oakwoodgolfclub-website. Vercel must not build this branch: that is
+      # the project's "Ignored Build Step" setting, not a vercel.json (measured on oakwood 2026-09-10).
+      - name: Publish stats.json to the stats-data branch when it changed
+        env:
+          GIT_AUTHOR_NAME: "github-actions[bot]"
+          GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
+          GIT_COMMITTER_NAME: "github-actions[bot]"
+          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
         run: |
+          set -euo pipefail
           norm() { jq -S 'del(.updatedAt)' "$1" 2>/dev/null; }
-          if git show HEAD:stats.json > /tmp/prev-stats.json 2>/dev/null \
+          # Reliably materialize refs/remotes/origin/stats-data (a bare `fetch <branch>` only sets
+          # FETCH_HEAD). Fails harmlessly on the first run (the branch does not exist yet).
+          git fetch origin +refs/heads/stats-data:refs/remotes/origin/stats-data 2>/dev/null || true
+          if git show origin/stats-data:stats.json > /tmp/prev-stats.json 2>/dev/null \
              && [ "$(norm /tmp/prev-stats.json)" = "$(norm stats.json)" ]; then
-            echo "stats.json unchanged (ignoring timestamp) — nothing to commit."
+            echo "stats.json unchanged (ignoring timestamp) — nothing to publish."
             exit 0
           fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats.json
-          git commit -m "chore(stats): emit stats.json @ ${GITHUB_SHA:0:7}"
-          git push origin HEAD:main
+          BLOB=$(git hash-object -w stats.json)
+          TREE=$(printf '100644 blob %s\tstats.json\n' "$BLOB" | git mktree)
+          MSG="chore(stats): emit stats.json @ ${GITHUB_SHA:0:7}"
+          if git rev-parse --verify origin/stats-data >/dev/null 2>&1; then
+            COMMIT=$(git commit-tree "$TREE" -p origin/stats-data -m "$MSG")
+          else
+            COMMIT=$(git commit-tree "$TREE" -m "$MSG")
+          fi
+          # Belt: a git push with an EMPTY source refspec (":refs/heads/stats-data") is a DELETE
+          # command — an empty $COMMIT would delete stats-data instead of updating it. `set -e`
+          # already aborts on a failed commit-tree substitution; this is the explicit guard so a
+          # branch deletion can never depend on implicit -e.
+          [ -n "$COMMIT" ] || { echo "::error::commit-tree produced no commit — refusing to push (would delete stats-data)"; exit 1; }
+          git push origin "${COMMIT}:refs/heads/stats-data"
