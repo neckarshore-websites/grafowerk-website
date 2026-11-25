@@ -1,0 +1,16 @@
+{
+  "repo": "neckarshore-websites/grafowerk-website",
+  "audited_sha": "b56aacfee15e18cb717b25640e79415b0f20bfe9",
+  "red": false,
+  "red_detail": null,
+  "tests": {
+    "total": 14,
+    "byType": {
+      "e2e": 3,
+      "unit": 11
+    },
+    "declared": {},
+    "lenses": {}
+  },
+  "updatedAt": "2026-11-25T06:37:01Z"
+}
